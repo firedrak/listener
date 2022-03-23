@@ -1,6 +1,7 @@
 import redis
 import sys
 import subprocess
+import time
 
 # Sample command to use listener.py
 # python3 listener.py redis_host
@@ -31,7 +32,8 @@ class redisCli:
 subprocess.check_output(["rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 
-while True: 
+while True:
+    time.sleep(2)
     if redisCli().should_i_start() == 'yes':
         spider_url = redisCli().get_spider()
         subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
