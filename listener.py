@@ -26,8 +26,8 @@ class redisCli:
     def get_spider(self):
         return self.REDIS_CLI.get('spider')
 
-    def set_should_i_start(self):
-        self.REDIS_CLI.set('should_i_start', 'no')
+    def set_should_i_start(self, value):
+        self.REDIS_CLI.set('should_i_start', value)
 
 subprocess.check_output(["rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
@@ -38,4 +38,5 @@ while True:
         spider_url = redisCli().get_spider()
         subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
         break
+set_should_i_start('no')
 print('Finished')
