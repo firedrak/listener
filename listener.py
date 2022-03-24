@@ -13,7 +13,6 @@ if args:
 
 class redisCli:
 
-#     redis_host = '172.16.221.234'
     redis_host = redis_host
     redis_port = 6379
 
