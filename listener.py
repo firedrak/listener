@@ -12,6 +12,7 @@ if args:
     redis_host = args[0]
     max_processes = int(args[1])
 
+active_processes = 0
 
 class redisCli:
 
@@ -28,7 +29,7 @@ class redisCli:
 
 def start_executor(redis_host, spider_url):
     subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
-    max_processes += 1
+    active_processes -= 1
 
 subprocess.check_output(["rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
@@ -36,9 +37,11 @@ subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 processes = []
 
 while True:
-    if len(processes) <= max_processes: 
+    if active_processes <= max_processes: 
         if redisCli().get_spider():
             spider_url = redisCli().get_spider()
             processe = Process(target = start_executor, args = (redis_host, spider_url))
+            active_processes += 1
             processe.start()
+            processes.append(processe)
 
