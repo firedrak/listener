@@ -1,7 +1,8 @@
 import redis
 import sys
 import subprocess
-import time
+from multiprocessing import Process
+
 
 # Sample command to use listener.py
 # python3 listener.py redis_host
@@ -9,33 +10,35 @@ import time
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
+    max_processes = int(args[1])
 
 
 class redisCli:
 
+#     redis_host = '172.16.221.234'
     redis_host = redis_host
     redis_port = 6379
 
     REDIS_CLI = redis.StrictRedis(
         host=redis_host, port=redis_port, decode_responses=True)
 
-    def should_i_start(self):
-        return self.REDIS_CLI.get('should_i_start')
-
     def get_spider(self):
-        return self.REDIS_CLI.get('spider')
+        return self.REDIS_CLI.rpop('spiders')
 
-    def set_should_i_start(self, value):
-        self.REDIS_CLI.set('should_i_start', value)
+
+def start_executor(redis_host, spider_url):
+    subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
+    max_processes += 1
 
 subprocess.check_output(["rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 
+processes = []
+
 while True:
-    time.sleep(2)
-    if redisCli().should_i_start() == 'yes':
-        spider_url = redisCli().get_spider()
-        subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
-        break
-set_should_i_start('no')
-print('Finished')
+    if len(processes) <= max_processes: 
+        if redisCli().get_spider():
+            spider_url = redisCli().get_spider()
+            processe = Process(target = start_executor, args = (redis_host, spider_url))
+            processe.start()
+
