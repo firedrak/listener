@@ -38,7 +38,7 @@ def start_executor(redis_host, spider_url):
     subprocess.call(["python3", "crawler/crawler.py", f"{redis_host} {spider_url}"])
     decr_active_process(listener_name)
 
-subprocess.check_output(["rm", "-rf", "crawler"])
+subprocess.check_output(["sudo", "rm", "-rf", "crawler"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/crawler.git"])
 
 processes = []
