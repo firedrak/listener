@@ -38,7 +38,7 @@ def decr_active_process(listener_name):
 
 def start_executor(redis_host, spider_url):
     subprocess.call(["bash", "shell/shell.sh"], stdout=FNULL)
-    subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url], stdout=FNULL)
+    subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     decr_active_process(listener_name)
 
 subprocess.check_output(["sudo", "rm", "-rf", "shell"])
