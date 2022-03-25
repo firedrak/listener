@@ -52,8 +52,8 @@ while True:
     if int(get_active_process(listener_name)) <= max_processes: 
         if llen_spider():
             spider_url = get_spider()
-            print('Crawling started ', f'active process : {get_active_process(listener_name)}')
             inc_active_process(listener_name)
+            print('Crawling started ', f'active process : {get_active_process(listener_name)}')
             processe = Process(target = start_executor, args = (redis_host, spider_url))
             processe.start()
             processes.append(processe)
