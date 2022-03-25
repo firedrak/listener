@@ -35,7 +35,8 @@ def decr_active_process(listener_name):
     REDIS_CLI.decr(f'active_process_of_{listener_name}')
 
 def start_executor(redis_host, spider_url):
-    subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
+    subprocess.call(["bash", "shell/shell.sh"])
+    subprocess.call(["time", "python3", "crawler/main.py", f"{redis_host} {spider_url}"])
     decr_active_process(listener_name)
 
 subprocess.check_output(["sudo", "rm", "-rf", "shell"])
