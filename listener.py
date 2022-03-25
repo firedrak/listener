@@ -22,16 +22,16 @@ REDIS_CLI = redis.StrictRedis(
 def get_spider():
     return REDIS_CLI.rpop('spiders')
 
-def get_active_process(host):
+def get_active_process(listener_name):
     return REDIS_CLI.get(f'active_process_of_{host}')
 
-def set_active_process(host):
+def set_active_process(listener_name):
     return REDIS_CLI.set(f'active_process_of_{host}', 0)
 
-def inc_active_process(host):
+def inc_active_process(listener_name):
     REDIS_CLI.incr(f'active_process_of_{host}')
 
-def decr_active_process(host):
+def decr_active_process(listener_name):
     REDIS_CLI.decr(f'active_process_of_{host}')
 
 def start_executor(redis_host, spider_url):
