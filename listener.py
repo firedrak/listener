@@ -25,6 +25,9 @@ def get_spider():
 def get_active_process(host):
     return REDIS_CLI.get(f'active_process_of_{host}')
 
+def set_active_process(host):
+    return REDIS_CLI.set(f'active_process_of_{host}', 0)
+
 def inc_active_process(host):
     REDIS_CLI.incr(f'active_process_of_{host}')
 
@@ -39,6 +42,7 @@ subprocess.check_output(["rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 
 processes = []
+set_active_process(listener_name)
 
 while True:
     if int(get_active_process(listener_name)) <= max_processes: 
