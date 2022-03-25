@@ -37,13 +37,13 @@ def decr_active_process(listener_name):
     REDIS_CLI.decr(f'active_process_of_{listener_name}')
 
 def start_executor(redis_host, spider_url):
-    subprocess.call(["bash", "shell/shell.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     decr_active_process(listener_name)
     print('Crawling finished ', f'active process : {get_active_process(listener_name)}')
 
 subprocess.check_output(["sudo", "rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
+subprocess.call(["bash", "shell/shell.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 processes = []
 set_active_process(listener_name)
