@@ -32,8 +32,8 @@ def decr_active_process(self, host):
     self.REDIS_CLI.decr(f'active_process_of_{host}')
 
 def start_executor(redis_host, spider_url):
-subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
-decr_active_process(listener_name)
+    subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
+    decr_active_process(listener_name)
 
 subprocess.check_output(["rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
