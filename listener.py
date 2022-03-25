@@ -35,11 +35,11 @@ def decr_active_process(listener_name):
     REDIS_CLI.decr(f'active_process_of_{host}')
 
 def start_executor(redis_host, spider_url):
-    subprocess.call(["bash", "shell/shell.sh", f"{redis_host} {spider_url}"])
+    subprocess.call(["python3", "crawler/crawler.py", f"{redis_host} {spider_url}"])
     decr_active_process(listener_name)
 
-subprocess.check_output(["rm", "-rf", "shell"])
-subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
+subprocess.check_output(["rm", "-rf", "crawler"])
+subprocess.call(["git", "clone", "https://github.com/firedrak/crawler.git"])
 
 processes = []
 set_active_process(listener_name)
