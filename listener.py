@@ -23,16 +23,16 @@ def get_spider():
     return REDIS_CLI.rpop('spiders')
 
 def get_active_process(listener_name):
-    return REDIS_CLI.get(f'active_process_of_{host}')
+    return REDIS_CLI.get(f'active_process_of_{listener_name}')
 
 def set_active_process(listener_name):
-    return REDIS_CLI.set(f'active_process_of_{host}', 0)
+    return REDIS_CLI.set(f'active_process_of_{listener_name}', 0)
 
 def inc_active_process(listener_name):
-    REDIS_CLI.incr(f'active_process_of_{host}')
+    REDIS_CLI.incr(f'active_process_of_{listener_name}')
 
 def decr_active_process(listener_name):
-    REDIS_CLI.decr(f'active_process_of_{host}')
+    REDIS_CLI.decr(f'active_process_of_{listener_name}')
 
 def start_executor(redis_host, spider_url):
     subprocess.call(["python3", "crawler/crawler.py", f"{redis_host} {spider_url}"])
