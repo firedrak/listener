@@ -1,5 +1,5 @@
 import redis
-import sys, time
+import os, sys, time
 import subprocess
 from multiprocessing import Process
 
@@ -10,8 +10,8 @@ from multiprocessing import Process
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
-    max_processes = int(args[1])
-    listener_name = args[2]
+#     max_processes = int(args[1])
+    listener_name = args[1]
 
 redis_port = 6379
 
@@ -47,6 +47,7 @@ subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 
 processes = []
 set_active_process(listener_name)
+max_process = int(os.cpu_count())
 
 while True:
     if int(get_active_process(listener_name)) < max_processes: 
