@@ -47,7 +47,7 @@ subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 
 processes = []
 set_active_process(listener_name)
-max_process = int(os.cpu_count())
+max_processes = int(os.cpu_count())
 
 while True:
     if int(get_active_process(listener_name)) < max_processes: 
