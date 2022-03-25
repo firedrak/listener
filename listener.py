@@ -1,5 +1,5 @@
 import redis
-import sys, tiem
+import sys, time
 import subprocess
 from multiprocessing import Process
 
