@@ -49,6 +49,8 @@ processes = []
 set_active_process(listener_name)
 max_processes = int(os.cpu_count())
 
+print('waiting for spider')
+
 while True:
     if int(get_active_process(listener_name)) < max_processes: 
         if llen_spider():
