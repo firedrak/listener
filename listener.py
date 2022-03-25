@@ -13,11 +13,13 @@ if args:
     max_processes = int(args[1])
     listener_name = args[2]
 
-redis_host = redis_host
 redis_port = 6379
 
 REDIS_CLI = redis.StrictRedis(
     host=redis_host, port=redis_port, decode_responses=True)
+
+def llen_spider():
+    return REDIS_CLI.llen('spiders')
 
 def get_spider():
     return REDIS_CLI.rpop('spiders')
@@ -47,7 +49,7 @@ set_active_process(listener_name)
 
 while True:
     if int(get_active_process(listener_name)) <= max_processes: 
-        if get_spider():
+        if llen_spider():
             spider_url = get_spider()
             inc_active_process(listener_name)
             processe = Process(target = start_executor, args = (redis_host, spider_url))
