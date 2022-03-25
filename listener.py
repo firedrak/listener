@@ -44,7 +44,7 @@ subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 processes = []
 
 while True:
-    if active_processes <= len(processes): 
+    if get_active_process(listener_name) <= max_processes: 
         if redisCli().get_spider():
             spider_url = redisCli().get_spider()
             inc_active_process(listener_name)
