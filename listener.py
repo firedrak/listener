@@ -37,8 +37,8 @@ def decr_active_process(listener_name):
     REDIS_CLI.decr(f'active_process_of_{listener_name}')
 
 def start_executor(redis_host, spider_url):
-    subprocess.call(["bash", "shell/shell.sh"])
-    subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url])
+    subprocess.call(["bash", "shell/shell.sh"], stdout=FNULL)
+    subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url], stdout=FNULL)
     decr_active_process(listener_name)
 
 subprocess.check_output(["sudo", "rm", "-rf", "shell"])
@@ -51,6 +51,7 @@ while True:
     if int(get_active_process(listener_name)) <= max_processes: 
         if llen_spider():
             spider_url = get_spider()
+            print('Crawling started')
             inc_active_process(listener_name)
             processe = Process(target = start_executor, args = (redis_host, spider_url))
             processe.start()
