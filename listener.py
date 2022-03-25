@@ -49,7 +49,7 @@ processes = []
 set_active_process(listener_name)
 
 while True:
-    if int(get_active_process(listener_name)) <= max_processes: 
+    if int(get_active_process(listener_name)) < max_processes: 
         if llen_spider():
             spider_url = get_spider()
             inc_active_process(listener_name)
