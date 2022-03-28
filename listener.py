@@ -38,7 +38,6 @@ def decr_active_process(listener_name):
 
 def start_executor(redis_host, spider_url):
     subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-#     subprocess.call(["python3", "crawler/main.py", redis_host, spider_url])
     decr_active_process(listener_name)
     print('Crawling finished ', f'active process : {get_active_process(listener_name)}')
 
@@ -46,6 +45,7 @@ subprocess.check_output(["sudo", "rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 subprocess.call(["bash", "shell/shell.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
+processes = []
 set_active_process(listener_name)
 max_processes = int(os.cpu_count())
 
@@ -57,5 +57,8 @@ while True:
             spider_url = get_spider()
             inc_active_process(listener_name)
             print('Crawling started ', f'active process : {get_active_process(listener_name)}')
-            start_executor(redis_host, spider_url)
+            processe = Process(target = start_executor, args = (redis_host, spi>
+            processe.start()
+            processes.append(processe)
+                                                                
     time.sleep(1)
