@@ -57,7 +57,7 @@ while True:
             spider_url = get_spider()
             inc_active_process(listener_name)
             print('Crawling started ', f'active process : {get_active_process(listener_name)}')
-            processe = Process(target = start_executor, args = (redis_host, spi>
+            processe = Process(target = start_executor, args = (redis_host, spider_url))
             processe.start()
             processes.append(processe)
                                                                 
