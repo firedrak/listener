@@ -3,10 +3,8 @@ import os, sys, time
 import subprocess
 from multiprocessing import Process
 
-
 # Sample command to use listener.py
 # python3 listener.py redis_host max_processes listener_name
-
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
