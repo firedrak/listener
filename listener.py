@@ -46,7 +46,6 @@ subprocess.check_output(["sudo", "rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 subprocess.call(["bash", "shell/shell.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-processes = []
 set_active_process(listener_name)
 max_processes = int(os.cpu_count())
 
@@ -58,7 +57,5 @@ while True:
             spider_url = get_spider()
             inc_active_process(listener_name)
             print('Crawling started ', f'active process : {get_active_process(listener_name)}')
-            processe = Process(target = start_executor, args = (redis_host, spider_url))
-            processe.start()
-            processes.append(processe)
+            start_executor(redis_host, spider_url)
     time.sleep(1)
