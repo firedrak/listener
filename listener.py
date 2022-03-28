@@ -1,6 +1,7 @@
 import redis
 import os, sys, time
 import subprocess
+import socket
 from multiprocessing import Process
 
 # Sample command to use listener.py
@@ -8,12 +9,14 @@ from multiprocessing import Process
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
-    listener_name = args[1]
 
 redis_port = 6379
 
 REDIS_CLI = redis.StrictRedis(
     host=redis_host, port=redis_port, decode_responses=True)
+
+def add_process_heart_beat(porcess_id, spider_url):
+    REDIS_CLI.lpush('heart_beats', f'heart_beat_of_{porcess_id}_{spider_url}')
 
 def llen_spider():
     return REDIS_CLI.llen('spiders')
@@ -35,7 +38,7 @@ def decr_active_process(listener_name):
 
 def start_executor(redis_host, spider_url):
 #     subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url])
+    subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url, porcess_id])
     decr_active_process(listener_name)
     print('Crawling finished ', f'active process : {get_active_process(listener_name)}')
 
@@ -44,18 +47,23 @@ subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
 subprocess.call(["bash", "shell/shell.sh"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 processes = []
+listener_name = socket.gethostname()
 set_active_process(listener_name)
 max_processes = int(os.cpu_count())
 
 print('waiting for spider')
+i = 0
 
 while True:
     if int(get_active_process(listener_name)) < max_processes: 
         if llen_spider():
             spider_url = get_spider()
             inc_active_process(listener_name)
-            print('Crawling started ', f'active process : {get_active_process(listener_name)}')
-            processe = Process(target = start_executor, args = (redis_host, spider_url))
+            add_process_heart_beat(listener_name, spider_url)
+            i =+ 1
+            porcess_id = f'{listener_name}-{i}'
+            print('Crawling started ', f'active process : {get_active_process(porcess_id)}')
+            processe = Process(target = start_executor, args = (redis_host, spider_url, porcess_id))
             processe.start()
             processes.append(processe)
                                                                 
