@@ -58,9 +58,9 @@ while True:
         if llen_spider():
             spider_url = get_spider()
             inc_active_process(listener_name)
-            add_process_heart_beat(listener_name, spider_url)
             i =+ 1
             porcess_id = f'{listener_name}-{i}'
+            add_process_heart_beat(porcess_id, spider_url)
             print('Crawling started ', f'active process : {get_active_process(porcess_id)}')
             processe = Process(target = start_executor, args = (redis_host, spider_url, porcess_id))
             processe.start()
