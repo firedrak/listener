@@ -10,7 +10,6 @@ from multiprocessing import Process
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
-#     max_processes = int(args[1])
     listener_name = args[1]
 
 redis_port = 6379
