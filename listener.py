@@ -15,9 +15,6 @@ redis_port = 6379
 REDIS_CLI = redis.StrictRedis(
     host=redis_host, port=redis_port, decode_responses=True)
 
-def add_process_heart_beat(porcess_id, spider_url):
-    REDIS_CLI.lpush('heart_beats', f'heart_beat_of_{porcess_id}_{spider_url}')
-
 def llen_spider():
     return REDIS_CLI.llen('spiders')
 
@@ -52,16 +49,12 @@ set_active_process(listener_name)
 max_processes = int(os.cpu_count())
 
 print('waiting for spider')
-i = 0
 
 while True:
     if int(get_active_process(listener_name)) < max_processes: 
         if llen_spider():
-            spider_url = get_spider()
+            spider_url, porcess_id = get_spider().split('_sp_')
             inc_active_process(listener_name)
-            i =+ 1
-            porcess_id = f'{listener_name}-{int(get_active_process(listener_name))}'
-            add_process_heart_beat(porcess_id, spider_url)
             print('Crawling started ', f'active process : {get_active_process(porcess_id)}')
             processe = Process(target = start_executor, args = (redis_host, spider_url, porcess_id))
             processe.start()
