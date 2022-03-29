@@ -15,6 +15,9 @@ redis_port = 6379
 REDIS_CLI = redis.StrictRedis(
     host=redis_host, port=redis_port, decode_responses=True)
 
+def add_process_heart_beat(porcess_id, spider_url):
+    REDIS_CLI.lpush('heart_beats', f'heart_beat_of_{porcess_id}_{spider_url}')
+
 def llen_spider():
     return REDIS_CLI.llen('spiders')
 
