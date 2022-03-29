@@ -40,7 +40,7 @@ def start_executor(redis_host, spider_url, porcess_id):
     subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url, porcess_id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 #     subprocess.call(["time", "python3", "crawler/main.py", redis_host, spider_url, porcess_id])
     decr_active_process(listener_name)
-    print('Crawling finished ', f'active process : {get_active_process(listener_name)}')
+    print('Crawling finished ', f'process id : {listener_name}')
 
 subprocess.check_output(["sudo", "rm", "-rf", "shell"])
 subprocess.call(["git", "clone", "https://github.com/firedrak/shell.git"])
